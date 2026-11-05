@@ -25,4 +25,11 @@ export async function migrateDatabase() {
       `O banco configurado não corresponde a database/init/01-schema.sql. Tabelas ausentes: ${missing.join(", ")}`,
     );
   }
+  const [columns] = await pool.execute(
+    "SELECT column_name FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='ocorrencias'",
+  );
+  const occurrenceColumns = new Set(columns.map((row) => row.COLUMN_NAME || row.column_name));
+  if (!occurrenceColumns.has("id_responsavel")) {
+    throw new Error("A tabela ocorrencias não possui id_responsavel. Recrie o banco em ambiente local ou aplique a atualização do schema database/init/01-schema.sql.");
+  }
 }

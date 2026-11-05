@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS ocorrencias (
   id_maquina INT NULL,
   id_tipo INT NOT NULL,
   id_usuario INT NULL,
+  id_responsavel INT NULL,
   data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   prazo DATETIME NOT NULL,
   data_conclusao DATETIME NULL,
@@ -64,6 +65,7 @@ CREATE TABLE IF NOT EXISTS ocorrencias (
   FOREIGN KEY (id_maquina) REFERENCES maquinas(id_maquina),
   FOREIGN KEY (id_tipo) REFERENCES tipos_ocorrencia(id_tipo),
   FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+  FOREIGN KEY (id_responsavel) REFERENCES usuarios(id_usuario),
   INDEX idx_ocorrencias_status_prazo (status, prazo),
   INDEX idx_ocorrencias_prioridade (prioridade)
 );

@@ -8,7 +8,7 @@ const configs = {
   maquinas: {
     table: "maquinas",
     id: "id_maquina",
-    fields: ["nome", "id_setor", "status"],
+    fields: ["nome", "id_setor", "status", "codigo_patrimonio", "fabricante", "modelo", "numero_serie", "ano_fabricacao", "data_aquisicao", "data_ultima_manutencao", "data_proxima_manutencao", "localizacao", "observacoes"],
   },
   usuarios: {
     table: "usuarios",
@@ -31,7 +31,7 @@ function resource(config) {
       let sql;
       if (config.table === "usuarios")
         sql =
-          "SELECT id_usuario,nome,email,descricao,descricao AS perfil,ativo FROM usuarios ORDER BY id_usuario DESC";
+        "SELECT id_usuario,nome,email,descricao,descricao AS perfil,ativo FROM usuarios ORDER BY id_usuario DESC";
       else if (config.table === "maquinas")
         sql =
           "SELECT m.*,(m.status='ativa') AS ativo FROM maquinas m ORDER BY m.id_maquina DESC";
