@@ -1,6 +1,11 @@
 :root {
-  --background: #f6f7f9;
-  --foreground: #172033;
+  --ink: #0d1f2f;
+  --platinum: #f2f5f8;
+  --blue: #023e8a;
+  --indigo: #4c338b;
+  --green: #22c55e;
+  --red: #f93549;
+  --gold: #ffcd4f;
 }
 
 html {
@@ -17,8 +22,8 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--platinum);
+  background: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

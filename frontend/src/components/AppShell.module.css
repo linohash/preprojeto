@@ -1,0 +1,287 @@
+.frame {
+  min-height: 100vh;
+  background: #091725;
+  color: #eaf0f5;
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 252px;
+  background: #0d1f2f;
+  border-right: 1px solid #ffffff12;
+  padding: 25px 16px 15px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+.brand {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  padding: 0 9px 30px;
+}
+.brandMark {
+  width: 39px;
+  height: 39px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #74bdff;
+  background: linear-gradient(140deg, #154b79, #1a2864);
+  font-size: 24px;
+}
+.brand b {
+  display: block;
+  font-size: 17px;
+  letter-spacing: -0.4px;
+  color: #f2f5f8;
+}
+.brand b span {
+  color: #7fc6fb;
+}
+.brand small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 1.2px;
+  color: #8196a8;
+  margin-top: 5px;
+}
+.groupLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  color: #74899a;
+  margin: 5px 10px 9px;
+}
+.sidebar nav {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+.navItem {
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 11px;
+  color: #adbdc9;
+  font-size: 12px;
+  transition:
+    background 0.16s,
+    color 0.16s;
+}
+.navItem:hover {
+  background: #152d40;
+  color: #f3f7fa;
+}
+.navIcon {
+  width: 18px;
+  text-align: center;
+  font-size: 16px;
+  color: #9aafbd;
+}
+.active {
+  background: #123d71;
+  color: #d9ebff;
+  box-shadow: inset 2px 0 #52a9ff;
+}
+.active .navIcon {
+  color: #73bdff;
+}
+.badge {
+  margin-left: auto;
+  background: #f93549;
+  color: white;
+  border-radius: 9px;
+  padding: 3px 7px;
+  font-size: 9px;
+}
+.sidebarFooter {
+  margin-top: auto;
+  border-top: 1px solid #ffffff14;
+  padding: 15px 5px 5px;
+  display: grid;
+  grid-template-columns: 9px 1fr;
+  align-items: center;
+  gap: 5px 7px;
+  color: #a9bac6;
+  font-size: 10px;
+}
+.sidebarFooter small {
+  grid-column: 2;
+  color: #74899a;
+  font-size: 9px;
+}
+.serverDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffcd4f;
+}
+.serverDot.online {
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e88;
+}
+.serverDot.offline {
+  background: #f93549;
+  box-shadow: 0 0 8px #f9354988;
+}
+.workspace {
+  min-width: 0;
+  width: calc(100% - 252px);
+  margin-left: 252px;
+}
+.topbar {
+  height: 65px;
+  border-bottom: 1px solid #ffffff12;
+  background: #0d1f2fdd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #8fa1af;
+  font-size: 11px;
+}
+.breadcrumb a {
+  font-size: 17px;
+  color: #b6c7d3;
+}
+.breadcrumb b {
+  color: #e7edf2;
+  font-weight: 600;
+}
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.userLabel {
+  font-size: 10px;
+  color: #a8b9c5;
+}
+.loginButton {
+  border: 0;
+  background: none;
+  color: #d3dde5;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.loginButton:hover {
+  color: #75baff;
+}
+.newButton {
+  border-radius: 7px;
+  background: var(--indigo);
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 5px 18px #4c338b55;
+  transition:
+    transform 0.15s,
+    background 0.15s;
+}
+.newButton:hover {
+  background: #6046a7;
+  transform: translateY(-1px);
+}
+.newButton span {
+  font-size: 15px;
+  margin-right: 5px;
+}
+.content {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 28px 30px 42px;
+}
+.menuToggle,
+.scrim {
+  display: none;
+}
+@media (max-width: 850px) {
+  .sidebar {
+    width: 225px;
+  }
+  .workspace {
+    width: calc(100% - 225px);
+    margin-left: 225px;
+  }
+  .content {
+    padding: 23px 20px 35px;
+  }
+  .topbar {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 650px) {
+  .sidebar {
+    width: 265px;
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    box-shadow: 15px 0 40px #0005;
+  }
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+  .workspace {
+    width: 100%;
+    margin-left: 0;
+  }
+  .menuToggle {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    width: 36px;
+    height: 36px;
+    z-index: 12;
+    border: 1px solid #ffffff20;
+    border-radius: 8px;
+    background: #10283b;
+    color: #eaf0f5;
+    font-size: 16px;
+  }
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 18;
+    background: #030a11a8;
+    border: 0;
+  }
+  .topbar {
+    padding: 0 13px 0 58px;
+    height: 60px;
+  }
+  .breadcrumb {
+    gap: 7px;
+    font-size: 10px;
+  }
+  .topActions {
+    gap: 9px;
+  }
+  .userLabel {
+    display: none;
+  }
+  .newButton {
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+  .content {
+    padding: 22px 14px 32px;
+  }
+}
