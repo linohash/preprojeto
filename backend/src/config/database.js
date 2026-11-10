@@ -1,5 +1,14 @@
 import mysql from "mysql2/promise";
 
+const requiredDatabaseVariables = ["DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME"];
+const missingDatabaseVariables = requiredDatabaseVariables.filter((name) =>
+  name === "DB_PASSWORD" ? process.env[name] === undefined : !process.env[name]?.trim(),
+);
+
+if (missingDatabaseVariables.length) {
+  throw new Error(`Missing required database environment variable(s): ${missingDatabaseVariables.join(", ")}`);
+}
+
 export const pool = mysql.createPool({
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT || 3306),

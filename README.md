@@ -194,12 +194,7 @@ O projeto esta sem Tailwind e sem Bootstrap por padrao. Cada aluno pode instalar
 
 O arquivo `database/init/01-schema.sql` cria a base inicial quando o container MySQL sobe pela primeira vez.
 
-Para reiniciar o banco local do zero:
-
-```bash
-docker compose down -v
-docker compose up -d database
-```
+O arquivo `database/init/01-schema.sql` é a referência do banco. O backend valida as tabelas necessárias ao iniciar e não cria nem altera tabelas ou colunas. A remoção de volumes com `docker compose down -v` apaga o banco e as evidências anexadas.
 
 ## Deploy no Coolify
 
@@ -227,3 +222,34 @@ Em deploy com dominio/reverse proxy, `NEXT_PUBLIC_API_URL` deve apontar para a U
 - Nao versionar `node_modules`, `.next` ou arquivos de build.
 - Manter o backend em JavaScript.
 - Instalar Tailwind ou Bootstrap apenas se o projeto precisar.
+
+## IndustriAlert
+
+O portal Next.js fica em `frontend/` e a API Express em `backend/`. O schema `database/init/01-schema.sql` define as tabelas usadas pela aplicação; o servidor valida a presença delas sem alterar o banco.
+
+### Inicialização local
+
+Na raiz do projeto, copie `.env.example` para `.env`, `backend/.env.example` para `backend/.env` e `frontend/.env.example` para `frontend/.env.local`. Use um `JWT_SECRET` próprio com pelo menos 32 caracteres fora do ambiente local.
+
+Suba o banco e inicie os serviços em dois terminais:
+
+```powershell
+docker compose up -d database
+cd backend
+npm ci
+npm run dev
+```
+
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
+
+Portal: `http://localhost:3000`. API: `http://localhost:8080`. O MySQL precisa estar acessível e a tabela `usuarios` precisa conter uma conta ativa para permitir o login. O perfil é lido do campo `usuarios.descricao` (`Administrador`, `Gestor` ou `Técnico`).
+
+As senhas são armazenadas com hash scrypt. Hashes SHA-256 existentes são convertidos para scrypt no primeiro login bem-sucedido. O projeto não cria contas automaticamente.
+
+Rotas principais: `POST /api/auth/login`, `GET|POST /api/ocorrencias`, `GET|PATCH /api/ocorrencias/:id`, `PATCH /api/ocorrencias/:id/status`, `POST /api/ocorrencias/:id/evidencias`, `GET /api/dashboard`, `GET|POST|PATCH /api/setores`, `/api/maquinas`, `/api/usuarios` e `/api/tipos-ocorrencia`. As operações protegidas usam token Bearer.
+
+Os anexos aceitos são JPEG, PNG e PDF até 5 MB; os arquivos ficam em `backend/uploads/` (ou no caminho configurado em `UPLOAD_DIR`). Em produção, configure armazenamento persistente e restrinja a permissão de acesso ao diretório.
