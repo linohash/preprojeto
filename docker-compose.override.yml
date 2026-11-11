@@ -4,9 +4,16 @@ services:
       - "${DATABASE_HOST_PORT:-3306}:3306"
 
   backend:
+    volumes:
+      - backend-uploads:/app/uploads
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change-this-secret-before-deploying}
     ports:
       - "${BACKEND_HOST_PORT:-8080}:${BACKEND_PORT:-8080}"
 
   frontend:
     ports:
       - "${FRONTEND_HOST_PORT:-3000}:${FRONTEND_PORT:-3000}"
+
+volumes:
+  backend-uploads:

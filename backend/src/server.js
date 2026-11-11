@@ -3,9 +3,15 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const backendDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const backendDirectory = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
 const projectDirectory = path.resolve(backendDirectory, "..");
-const envPath = [path.join(backendDirectory, ".env"), path.join(projectDirectory, ".env")].find(existsSync);
+const envPath = [
+  path.join(backendDirectory, ".env"),
+  path.join(projectDirectory, ".env"),
+].find(existsSync);
 
 if (envPath) dotenv.config({ path: envPath });
 

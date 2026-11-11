@@ -1,4 +1,12 @@
-:root { --ink:#0d1f2f; --platinum:#f2f5f8; --blue:#023e8a; --indigo:#4c338b; --green:#22c55e; --red:#f93549; --gold:#ffcd4f; }
+:root {
+  --ink: #0d1f2f;
+  --platinum: #f2f5f8;
+  --blue: #023e8a;
+  --indigo: #4c338b;
+  --green: #22c55e;
+  --red: #f93549;
+  --gold: #ffcd4f;
+}
 
 html {
   height: 100%;

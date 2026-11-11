@@ -5,9 +5,229 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "../../../lib/api.js";
 import styles from "../forms.module.css";
 
-const initial={titulo:"",descricao:"",prioridade:"Média",id_setor:"",id_maquina:"",id_tipo:"",id_responsavel:"",prazo:""};
-export default function NewOccurrence(){const [form,setForm]=useState(initial);const [sets,setSets]=useState([]);const [machines,setMachines]=useState([]);const [types,setTypes]=useState([]);const [users,setUsers]=useState([]);const [error,setError]=useState("");const [message,setMessage]=useState("");const [busy,setBusy]=useState(false);const [loading,setLoading]=useState(true);
-useEffect(()=>{Promise.all([apiFetch("/setores"),apiFetch("/maquinas"),apiFetch("/tipos-ocorrencia"),apiFetch("/usuarios")]).then(([a,b,c,d])=>{setSets(a.filter(x=>x.ativo));setMachines(b.filter(x=>x.ativo));setTypes(c.filter(x=>x.ativo));setUsers(d.filter(x=>x.ativo));setForm(v=>({...v,id_setor:String(a.find(x=>x.ativo)?.id_setor||""),id_tipo:String(c.find(x=>x.ativo)?.id_tipo||"")}));}).catch(e=>setError(e.message)).finally(()=>setLoading(false));},[]);
-function update(e){setForm(v=>({...v,[e.target.name]:e.target.value}));}
-async function submit(e){e.preventDefault();setError("");setMessage("");setBusy(true);try{const payload={...form,id_setor:Number(form.id_setor),id_tipo:Number(form.id_tipo),id_maquina:form.id_maquina?Number(form.id_maquina):null,id_responsavel:form.id_responsavel?Number(form.id_responsavel):null};const result=await apiFetch("/ocorrencias",{method:"POST",body:JSON.stringify(payload)});setMessage(`Ocorrência OC-${result.id_ocorrencia} criada com sucesso.`);setForm(initial);}catch(err){setError(err.message);}finally{setBusy(false);}}
-return <section className={styles.page}><div className={styles.heading}><div><span className={styles.eyebrow}>REGISTRO OPERACIONAL</span><h1>Nova ocorrência</h1><p>Descreva a falha para que a equipe possa priorizar o atendimento.</p></div><Link href="/dashboard/ocorrencias">Ver ocorrências →</Link></div>{loading?<p className={styles.notice}>Carregando cadastros…</p>:error&&!sets.length?<div className={styles.error}>{error} <Link href="/login">Entre novamente →</Link></div>:<form className={styles.form} onSubmit={submit}><div className={styles.grid}><label className={styles.wide}>Título da ocorrência<input name="titulo" required maxLength="180" value={form.titulo} onChange={update} placeholder="Ex.: Vibração anormal na prensa"/></label><label className={styles.wide}>Descrição<textarea name="descricao" required minLength="8" value={form.descricao} onChange={update} placeholder="Descreva o que aconteceu, quando começou e os impactos observados."/></label><label>Prioridade<select name="prioridade" value={form.prioridade} onChange={update}><option>Baixa</option><option>Média</option><option>Alta</option><option>Crítica</option></select></label><label>Tipo de ocorrência<select name="id_tipo" required value={form.id_tipo} onChange={update}><option value="">Selecione um tipo</option>{types.map(x=><option key={x.id_tipo} value={x.id_tipo}>{x.nome}</option>)}</select></label><label>Setor<select name="id_setor" required value={form.id_setor} onChange={e=>{setForm(v=>({...v,id_setor:e.target.value,id_maquina:""}));}}><option value="">Selecione um setor</option>{sets.map(x=><option key={x.id_setor} value={x.id_setor}>{x.nome}</option>)}</select></label><label>Máquina (opcional)<select name="id_maquina" value={form.id_maquina} onChange={update}><option value="">Não se aplica</option>{machines.filter(x=>String(x.id_setor)===form.id_setor).map(x=><option key={x.id_maquina} value={x.id_maquina}>{x.nome}</option>)}</select></label><label>Responsável (opcional)<select name="id_responsavel" value={form.id_responsavel} onChange={update}><option value="">Definir depois</option>{users.map(x=><option key={x.id_usuario} value={x.id_usuario}>{x.nome}</option>)}</select></label><label>Prazo de atendimento<input name="prazo" type="datetime-local" required value={form.prazo} onChange={update} min={new Date().toISOString().slice(0,16)}/></label></div>{error&&<div className={styles.error}>{error}</div>}{message&&<div className={styles.success}>{message} <Link href="/dashboard/ocorrencias">Abrir lista →</Link></div>}<div className={styles.actions}><Link href="/dashboard">Cancelar</Link><button disabled={busy||!types.length||!sets.length}>{busy?"Salvando…":"Registrar ocorrência"}</button></div></form>}</section>}
+const initial = {
+  titulo: "",
+  descricao: "",
+  prioridade: "Média",
+  id_setor: "",
+  id_maquina: "",
+  id_tipo: "",
+  id_responsavel: "",
+  prazo: "",
+};
+export default function NewOccurrence() {
+  const [form, setForm] = useState(initial);
+  const [sets, setSets] = useState([]);
+  const [machines, setMachines] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    Promise.all([
+      apiFetch("/setores"),
+      apiFetch("/maquinas"),
+      apiFetch("/tipos-ocorrencia"),
+      apiFetch("/usuarios"),
+    ])
+      .then(([a, b, c, d]) => {
+        setSets(a.filter((x) => x.ativo));
+        setMachines(b.filter((x) => x.ativo));
+        setTypes(c.filter((x) => x.ativo));
+        setUsers(d.filter((x) => x.ativo));
+        setForm((v) => ({
+          ...v,
+          id_setor: String(a.find((x) => x.ativo)?.id_setor || ""),
+          id_tipo: String(c.find((x) => x.ativo)?.id_tipo || ""),
+        }));
+      })
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+  function update(e) {
+    setForm((v) => ({ ...v, [e.target.name]: e.target.value }));
+  }
+  async function submit(e) {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    setBusy(true);
+    try {
+      const payload = {
+        ...form,
+        id_setor: Number(form.id_setor),
+        id_tipo: Number(form.id_tipo),
+        id_maquina: form.id_maquina ? Number(form.id_maquina) : null,
+        id_responsavel: form.id_responsavel
+          ? Number(form.id_responsavel)
+          : null,
+      };
+      const result = await apiFetch("/ocorrencias", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      setMessage(`Ocorrência OC-${result.id_ocorrencia} criada com sucesso.`);
+      setForm(initial);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <section className={styles.page}>
+      <div className={styles.heading}>
+        <div>
+          <span className={styles.eyebrow}>REGISTRO OPERACIONAL</span>
+          <h1>Nova ocorrência</h1>
+          <p>
+            Descreva a falha para que a equipe possa priorizar o atendimento.
+          </p>
+        </div>
+        <Link href="/dashboard/ocorrencias">Ver ocorrências →</Link>
+      </div>
+      {loading ? (
+        <p className={styles.notice}>Carregando cadastros…</p>
+      ) : error && !sets.length ? (
+        <div className={styles.error}>
+          {error} <Link href="/login">Entre novamente →</Link>
+        </div>
+      ) : (
+        <form className={styles.form} onSubmit={submit}>
+          <div className={styles.grid}>
+            <label className={styles.wide}>
+              Título da ocorrência
+              <input
+                name="titulo"
+                required
+                maxLength="180"
+                value={form.titulo}
+                onChange={update}
+                placeholder="Ex.: Vibração anormal na prensa"
+              />
+            </label>
+            <label className={styles.wide}>
+              Descrição
+              <textarea
+                name="descricao"
+                required
+                minLength="8"
+                value={form.descricao}
+                onChange={update}
+                placeholder="Descreva o que aconteceu, quando começou e os impactos observados."
+              />
+            </label>
+            <label>
+              Prioridade
+              <select
+                name="prioridade"
+                value={form.prioridade}
+                onChange={update}
+              >
+                <option>Baixa</option>
+                <option>Média</option>
+                <option>Alta</option>
+                <option>Crítica</option>
+              </select>
+            </label>
+            <label>
+              Tipo de ocorrência
+              <select
+                name="id_tipo"
+                required
+                value={form.id_tipo}
+                onChange={update}
+              >
+                <option value="">Selecione um tipo</option>
+                {types.map((x) => (
+                  <option key={x.id_tipo} value={x.id_tipo}>
+                    {x.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Setor
+              <select
+                name="id_setor"
+                required
+                value={form.id_setor}
+                onChange={(e) => {
+                  setForm((v) => ({
+                    ...v,
+                    id_setor: e.target.value,
+                    id_maquina: "",
+                  }));
+                }}
+              >
+                <option value="">Selecione um setor</option>
+                {sets.map((x) => (
+                  <option key={x.id_setor} value={x.id_setor}>
+                    {x.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Máquina (opcional)
+              <select
+                name="id_maquina"
+                value={form.id_maquina}
+                onChange={update}
+              >
+                <option value="">Não se aplica</option>
+                {machines
+                  .filter((x) => String(x.id_setor) === form.id_setor)
+                  .map((x) => (
+                    <option key={x.id_maquina} value={x.id_maquina}>
+                      {x.nome}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <label>
+              Responsável (opcional)
+              <select
+                name="id_responsavel"
+                value={form.id_responsavel}
+                onChange={update}
+              >
+                <option value="">Definir depois</option>
+                {users.map((x) => (
+                  <option key={x.id_usuario} value={x.id_usuario}>
+                    {x.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Prazo de atendimento
+              <input
+                name="prazo"
+                type="datetime-local"
+                required
+                value={form.prazo}
+                onChange={update}
+                min={new Date().toISOString().slice(0, 16)}
+              />
+            </label>
+          </div>
+          {error && <div className={styles.error}>{error}</div>}
+          {message && (
+            <div className={styles.success}>
+              {message} <Link href="/dashboard/ocorrencias">Abrir lista →</Link>
+            </div>
+          )}
+          <div className={styles.actions}>
+            <Link href="/dashboard">Cancelar</Link>
+            <button disabled={busy || !types.length || !sets.length}>
+              {busy ? "Salvando…" : "Registrar ocorrência"}
+            </button>
+          </div>
+        </form>
+      )}
+    </section>
+  );
+}
