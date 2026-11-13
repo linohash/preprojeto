@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "../../lib/api.js";
@@ -33,7 +34,13 @@ export default function LoginPage() {
   return (
     <main className={styles.page}>
       <Link href="/" className={styles.brand}>
-        <span>⚙</span>Industri<b>Alert</b>
+        <Image
+          src="/imagens/Industrialert.jpg"
+          alt="Logo IndustriAlert"
+          width={36}
+          height={36}
+        />
+        Industri<b>Alert</b>
       </Link>
       <form className={styles.card} onSubmit={submit}>
         <span className={styles.label}>ACESSO AO SISTEMA</span>

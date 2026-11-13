@@ -25,12 +25,8 @@
 .brandMark {
   width: 39px;
   height: 39px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  color: #74bdff;
-  background: linear-gradient(140deg, #154b79, #1a2864);
-  font-size: 24px;
+  object-fit: contain;
+  flex: 0 0 39px;
 }
 .brand b {
   display: block;
@@ -78,9 +74,10 @@
   color: #f3f7fa;
 }
 .navIcon {
+  flex: 0 0 18px;
   width: 18px;
   text-align: center;
-  font-size: 16px;
+  font-size: 1rem;
   color: #9aafbd;
 }
 .active {

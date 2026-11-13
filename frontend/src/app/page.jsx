@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { apiFetch, isAuthenticated } from "../lib/api.js";
 import styles from "./page.module.css";
@@ -82,7 +83,12 @@ export default function Home() {
     <main className={styles.page}>
       <header className={styles.header}>
         <Link href="/" className={styles.brand}>
-          <span className={styles.mark}>⚙</span>
+          <Image
+            src="/imagens/Industrialert.jpg"
+            alt="Logo IndustriAlert"
+            width={40}
+            height={40}
+          />
           <span>
             Industri<b>Alert</b>
             <small>GESTÃO DE OCORRÊNCIAS</small>
@@ -217,7 +223,13 @@ export default function Home() {
         </section>
         <footer className={styles.footer}>
           <Link className={styles.brand} href="/">
-            <span className={styles.mark}>⚙</span>
+            <Image
+              className={styles.mark}
+              src="/imagens/Industrialert.jpg"
+              alt="Logo IndustriAlert"
+              width={35}
+              height={35}
+            />
             <span>
               Industri<b>Alert</b>
             </span>

@@ -1,19 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { API_URL, apiFetch } from "../lib/api.js";
 import styles from "./AppShell.module.css";
 
 const primary = [
-  ["▦", "Dashboard", "/dashboard"],
-  ["⚑", "Ocorrências", "/dashboard/ocorrencias"],
-  ["＋", "Nova ocorrência", "/dashboard/nova-ocorrencia"],
-  ["▤", "Setores e máquinas", "/dashboard/setores-maquinas"],
-  ["♙", "Responsáveis", "/dashboard/responsaveis"],
-  ["⌁", "Indicadores", "/dashboard/indicadores"],
-  ["▧", "Relatórios", "/dashboard/relatorios"],
+  ["speedometer2", "Dashboard", "/dashboard"],
+  ["exclamation-triangle", "Ocorrências", "/dashboard/ocorrencias"],
+  ["plus-circle", "Nova ocorrência", "/dashboard/nova-ocorrencia"],
+  ["gear-wide-connected", "Setores e máquinas", "/dashboard/setores-maquinas"],
+  ["people", "Responsáveis", "/dashboard/responsaveis"],
+  ["graph-up", "Indicadores", "/dashboard/indicadores"],
+  ["file-earmark-bar-graph", "Relatórios", "/dashboard/relatorios"],
 ];
 
 export default function AppShell({ children }) {
@@ -83,7 +84,7 @@ export default function AppShell({ children }) {
         onClick={() => setMobileOpen(false)}
         className={`${styles.navItem} ${pathname === href || (href !== "/dashboard" && pathname.startsWith(href)) ? styles.active : ""}`}
       >
-        <span className={styles.navIcon}>{icon}</span>
+        <i className={`bi bi-${icon} ${styles.navIcon}`} aria-hidden="true" />
         <span>{title}</span>
         {title === "Ocorrências" && count !== null && (
           <b className={styles.badge}>{count}</b>
@@ -110,7 +111,13 @@ export default function AppShell({ children }) {
         className={`${styles.sidebar} ${mobileOpen ? styles.sidebarOpen : ""}`}
       >
         <Link className={styles.brand} href="/dashboard">
-          <span className={styles.brandMark}>⚙</span>
+          <Image
+            className={styles.brandMark}
+            src="/imagens/Industrialert.jpg"
+            alt="Logo IndustriAlert"
+            width={40}
+            height={40}
+          />
           <span>
             <b>
               Industri<span>Alert</span>
@@ -122,7 +129,7 @@ export default function AppShell({ children }) {
         <nav>{navItems(primary)}</nav>
         <span className={styles.groupLabel}>SISTEMA</span>
         <nav>
-          {navItems([["⚙", "Configurações", "/dashboard/configuracoes"]])}
+          {navItems([["gear", "Configurações", "/dashboard/configuracoes"]])}
         </nav>
         <div className={styles.sidebarFooter}>
           <span className={`${styles.serverDot} ${styles[server]}`} />
@@ -180,3 +187,4 @@ export default function AppShell({ children }) {
     </div>
   );
 }
+

@@ -18,15 +18,10 @@
   font-weight: 800;
   font-size: 16px;
 }
-.brand > span {
-  display: grid;
-  place-items: center;
+.brand > img {
   width: 34px;
   height: 34px;
-  border-radius: 9px;
-  background: #183956;
-  color: #82c7fb;
-  font-size: 21px;
+  object-fit: contain;
 }
 .brand b {
   color: #82c7fb;
