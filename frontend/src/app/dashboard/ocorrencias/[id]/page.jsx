@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiDownload, apiFetch } from "../../../../lib/api.js";
 import styles from "../../forms.module.css";
 
 export default function OccurrenceDetail() {
   const { id } = useParams();
+  const router = useRouter();
   const [item, setItem] = useState(null);
   const [form, setForm] = useState({
     status: "",
@@ -108,6 +109,20 @@ export default function OccurrenceDetail() {
       setError(e.message);
     }
   }
+  async function deleteOccurrence() {
+    if (!window.confirm("Tem certeza que deseja excluir esta ocorrência?"))
+      return;
+    setBusy(true);
+    setError("");
+    try {
+      await apiFetch(`/ocorrencias/${id}`, { method: "DELETE" });
+      window.dispatchEvent(new Event("industri-alert-count-refresh"));
+      router.push("/dashboard/ocorrencias");
+    } catch (e) {
+      setError(e.message);
+      setBusy(false);
+    }
+  }
   if (!item)
     return (
       <div className={styles.page}>
@@ -137,6 +152,23 @@ export default function OccurrenceDetail() {
         </div>
         <Link href="/dashboard/ocorrencias">← Todas as ocorrências</Link>
       </div>
+      {["Administrador", "Gestor"].includes(userRole) && (
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.danger}
+            disabled={busy}
+            onClick={deleteOccurrence}
+          >
+            Excluir ocorrência
+          </button>
+        </div>
+      )}
+      {!(["Administrador", "Gestor"].includes(userRole)) && (
+        <p className={styles.notice}>
+          A exclusão é permitida para Administrador e Gestor. Perfil atual: {userRole || "não identificado"}.
+        </p>
+      )}
       <div className={styles.detailGrid}>
         <article className={styles.form}>
           <h2>Informações da ocorrência</h2>
@@ -276,7 +308,7 @@ export default function OccurrenceDetail() {
                 onClick={() => download(evidence)}
                 key={evidence.id_evidencia}
               >
-                <span>▧</span>
+                <span><i className="bi bi-file-earmark-image" /></span>
                 <b>{evidence.nome_arquivo}</b>
                 <small>
                   {(evidence.tamanho / 1024).toFixed(0)} KB · baixar

@@ -17,6 +17,7 @@ export default function SectorsMachines() {
       <ResourcePanel
         title="Máquinas"
         endpoint="/maquinas"
+        deletable
         columns={[
           { key: "id_maquina", label: "ID" },
           { key: "nome", label: "MÁQUINA" },
@@ -38,6 +39,7 @@ export default function SectorsMachines() {
       <ResourcePanel
         title="Tipos de ocorrência"
         endpoint="/tipos-ocorrencia"
+        deletable
         columns={[
           { key: "id_tipo", label: "ID" },
           { key: "nome", label: "TIPO" },

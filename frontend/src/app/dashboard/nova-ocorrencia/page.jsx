@@ -21,11 +21,19 @@ export default function NewOccurrence() {
   const [machines, setMachines] = useState([]);
   const [types, setTypes] = useState([]);
   const [users, setUsers] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    try {
+      setProfile(
+        JSON.parse(window.localStorage.getItem("industri-alert-user") || "null"),
+      );
+    } catch {
+      setProfile(null);
+    }
     Promise.all([
       apiFetch("/setores"),
       apiFetch("/maquinas"),
@@ -187,21 +195,23 @@ export default function NewOccurrence() {
                   ))}
               </select>
             </label>
-            <label>
-              Responsável (opcional)
-              <select
-                name="id_responsavel"
-                value={form.id_responsavel}
-                onChange={update}
-              >
-                <option value="">Definir depois</option>
-                {users.map((x) => (
-                  <option key={x.id_usuario} value={x.id_usuario}>
-                    {x.nome}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {profile?.perfil !== "Técnico" && (
+              <label>
+                Responsável (opcional)
+                <select
+                  name="id_responsavel"
+                  value={form.id_responsavel}
+                  onChange={update}
+                >
+                  <option value="">Definir depois</option>
+                  {users.map((x) => (
+                    <option key={x.id_usuario} value={x.id_usuario}>
+                      {x.nome}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <label>
               Prazo de atendimento
               <input

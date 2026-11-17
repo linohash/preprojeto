@@ -5,6 +5,7 @@ import {
   list,
   create,
   detail,
+  remove,
   updateStatus,
   updateDetails,
   uploadEvidence,
@@ -15,6 +16,7 @@ const router = Router();
 router.use(authenticate);
 router.get("/", list);
 router.post("/", create);
+router.delete("/:id", allowRoles("Administrador", "Gestor"), remove);
 router.get("/:id", detail);
 router.patch(
   "/:id/responsavel",

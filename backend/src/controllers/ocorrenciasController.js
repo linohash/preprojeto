@@ -185,7 +185,9 @@ export async function create(request, response, next) {
           id_setor,
           id_maquina || null,
           id_tipo,
-          id_responsavel || request.usuario.sub,
+          request.usuario.role === "Técnico"
+            ? request.usuario.sub
+            : id_responsavel || request.usuario.sub,
           prazo,
         ],
       );
@@ -247,6 +249,49 @@ export async function detail(request, response, next) {
     response.json({ ...rows[0], historico: history, evidencias });
   } catch (error) {
     next(error);
+  }
+}
+
+export async function remove(request, response, next) {
+  let connection;
+  try {
+    const id = Number(request.params.id);
+    if (!Number.isInteger(id) || id < 1)
+      return response.status(400).json({ message: "Identificador inválido." });
+
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+    const [evidencias] = await connection.execute(
+      "SELECT caminho FROM evidencias WHERE id_ocorrencia=?",
+      [id],
+    );
+    const [result] = await connection.execute(
+      "DELETE FROM ocorrencias WHERE id_ocorrencia=?",
+      [id],
+    );
+    if (!result.affectedRows) {
+      await connection.rollback();
+      return response
+        .status(404)
+        .json({ message: "Ocorrência não encontrada." });
+    }
+    await connection.commit();
+
+    const uploadDirectory =
+      process.env.UPLOAD_DIR || path.join(process.cwd(), "uploads");
+    await Promise.all(
+      evidencias.map((evidencia) =>
+        unlink(path.join(uploadDirectory, path.basename(evidencia.caminho))).catch(
+          () => {},
+        ),
+      ),
+    );
+    response.json({ message: "Ocorrência excluída." });
+  } catch (error) {
+    if (connection) await connection.rollback().catch(() => {});
+    next(error);
+  } finally {
+    connection?.release();
   }
 }
 

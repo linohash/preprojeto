@@ -98,6 +98,9 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+.actions button.danger {
+  background: #8b3038;
+}
 .error,
 .success,
 .notice {

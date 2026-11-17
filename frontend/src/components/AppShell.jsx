@@ -9,10 +9,10 @@ import styles from "./AppShell.module.css";
 
 const primary = [
   ["speedometer2", "Dashboard", "/dashboard"],
-  ["exclamation-triangle", "Ocorrências", "/dashboard/ocorrencias"],
+  ["flag", "Ocorrências", "/dashboard/ocorrencias"],
   ["plus-circle", "Nova ocorrência", "/dashboard/nova-ocorrencia"],
-  ["gear-wide-connected", "Setores e máquinas", "/dashboard/setores-maquinas"],
-  ["people", "Responsáveis", "/dashboard/responsaveis"],
+  ["building-gear", "Setores e máquinas", "/dashboard/setores-maquinas"],
+  ["person-badge", "Responsáveis", "/dashboard/responsaveis"],
   ["graph-up", "Indicadores", "/dashboard/indicadores"],
   ["file-earmark-bar-graph", "Relatórios", "/dashboard/relatorios"],
 ];
@@ -62,10 +62,12 @@ export default function AppShell({ children }) {
         }
       }
     };
+    window.addEventListener("industri-alert-count-refresh", refresh);
     refresh();
     const timer = window.setInterval(refresh, 30000);
     return () => {
       live = false;
+      window.removeEventListener("industri-alert-count-refresh", refresh);
       window.clearInterval(timer);
     };
   }, []);
@@ -127,10 +129,6 @@ export default function AppShell({ children }) {
         </Link>
         <span className={styles.groupLabel}>MENU PRINCIPAL</span>
         <nav>{navItems(primary)}</nav>
-        <span className={styles.groupLabel}>SISTEMA</span>
-        <nav>
-          {navItems([["gear", "Configurações", "/dashboard/configuracoes"]])}
-        </nav>
         <div className={styles.sidebarFooter}>
           <span className={`${styles.serverDot} ${styles[server]}`} />
           <span>
@@ -142,6 +140,7 @@ export default function AppShell({ children }) {
                 : "verificando"}
           </span>
           <small>{profile?.nome || "Acesso de visitante"}</small>
+          <small>{profile?.perfil || "Sem perfil de gestão"}</small>
         </div>
       </aside>
       <div className={styles.workspace}>
@@ -156,7 +155,7 @@ export default function AppShell({ children }) {
                 ([, , href]) =>
                   pathname === href ||
                   (href !== "/dashboard" && pathname.startsWith(href)),
-              )?.[1] || "Configurações"}
+              )?.[1] || "Dashboard"}
             </b>
           </div>
           <div className={styles.topActions}>

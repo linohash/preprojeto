@@ -7,46 +7,46 @@ import { apiFetch, isAuthenticated } from "../lib/api.js";
 import styles from "./page.module.css";
 
 const shortcuts = [
-  ["▦", "Dashboard", "/dashboard"],
-  ["⚑", "Ocorrências", "/dashboard/ocorrencias"],
-  ["▤", "Setores & Máquinas", "/dashboard/setores-maquinas"],
-  ["♙", "Responsáveis", "/dashboard/responsaveis"],
-  ["⌁", "Indicadores & SLA", "/dashboard/indicadores"],
-  ["▧", "Relatórios", "/dashboard/relatorios"],
+  ["bi bi-grid", "Dashboard", "/dashboard"],
+  ["bi bi-flag", "Ocorrências", "/dashboard/ocorrencias"],
+  ["bi bi-building-gear", "Setores & Máquinas", "/dashboard/setores-maquinas"],
+  ["bi bi-person-badge", "Responsáveis", "/dashboard/responsaveis"],
+  ["bi bi-graph-up", "Indicadores & SLA", "/dashboard/indicadores"],
+  ["bi bi-file-earmark-bar-graph", "Relatórios", "/dashboard/relatorios"],
 ];
 const features = [
   [
-    "▦",
+    "bi bi-building-gear",
     "Cadastros Estruturados",
     "Cadastre setores, máquinas, tipos de ocorrência e equipes responsáveis de forma simples e integrada.",
     "/dashboard/setores-maquinas",
   ],
   [
-    "⚑",
+    "bi bi-flag",
     "Abertura com Prioridade",
     "Abra ocorrências definindo níveis de criticidade e anexe fotos e evidências da falha no ato.",
     "/dashboard/nova-ocorrencia",
   ],
   [
-    "⇢",
+    "bi bi-arrow-right-circle",
     "Atribuição & Escalonamento",
     "Direcione os chamados aos técnicos corretos com regras de escalonamento por atraso.",
     "/dashboard/ocorrencias",
   ],
   [
-    "◷",
+    "bi bi-clock-history",
     "Acompanhamento de Prazo",
     "Controle o SLA e os status de atendimento em tempo real com alertas visuais e contadores.",
     "/dashboard/indicadores",
   ],
   [
-    "⌕",
+    "bi bi-search",
     "Causa Raiz & Solução",
     "Registre as causas identificadas e as soluções aplicadas para documentar o histórico.",
     "/dashboard/ocorrencias",
   ],
   [
-    "▤",
+    "bi bi-file-earmark-bar-graph",
     "Dashboards & Relatórios",
     "Consulte métricas de recorrência, criticidade e tempo médio de atendimento.",
     "/dashboard/relatorios",
@@ -118,7 +118,7 @@ export default function Home() {
           </p>
           <form className={styles.search} onSubmit={search}>
             <label>
-              <span>⌕</span>
+              <span><i className="bi bi-search" /></span>
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -188,7 +188,7 @@ export default function Home() {
           <div className={styles.shortcutGrid}>
             {shortcuts.map(([icon, title, href]) => (
               <Link href={href} key={title}>
-                <span>{icon}</span>
+                <span><i className={icon} /></span>
                 <b>{title}</b>
                 <i>↗</i>
               </Link>
@@ -210,7 +210,7 @@ export default function Home() {
           <div className={styles.featureGrid}>
             {features.map(([icon, title, description, href], i) => (
               <Link href={href} className={styles.feature} key={title}>
-                <span className={styles.featureIcon}>{icon}</span>
+                <span className={styles.featureIcon}><i className={icon} /></span>
                 <span className={styles.number}>0{i + 1}</span>
                 <h3>{title}</h3>
                 <p>{description}</p>

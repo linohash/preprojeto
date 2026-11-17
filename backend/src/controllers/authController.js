@@ -27,13 +27,16 @@ function tokenFor(user) {
   return `${header}.${payload}.${signature}`;
 }
 
-function roleFor(description) {
+export function roleFor(description) {
   const normalized = String(description || "")
     .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase("pt-BR");
-  if (normalized === "administrador") return "Administrador";
-  if (normalized === "gestor") return "Gestor";
-  if (normalized === "técnico" || normalized === "tecnico") return "Técnico";
+  if (/\b(admin|administrador)\b/.test(normalized)) return "Administrador";
+  if (/\b(gestor|gerente)\b/.test(normalized))
+    return "Gestor";
+  if (/\btecnico\b/.test(normalized)) return "Técnico";
   return "Técnico";
 }
 

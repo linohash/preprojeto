@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { pool } from "../config/database.js";
 import { authenticate, allowRoles } from "../middlewares/auth.js";
-import { hashPassword } from "../controllers/authController.js";
+import { hashPassword, roleFor } from "../controllers/authController.js";
 
 const configs = {
   setores: { table: "setores", id: "id_setor", fields: ["nome", "ativo"] },
@@ -29,15 +29,19 @@ function resource(config) {
   router.get("/", async (req, res, next) => {
     try {
       let sql;
-      if (config.table === "usuarios")
+      if (config.table === "usuarios") {
         sql =
           "SELECT id_usuario,nome,email,descricao,descricao AS perfil,ativo FROM usuarios ORDER BY id_usuario DESC";
-      else if (config.table === "maquinas")
+      } else if (config.table === "maquinas")
         sql =
           "SELECT m.*,(m.status='ativa') AS ativo FROM maquinas m ORDER BY m.id_maquina DESC";
       else sql = `SELECT * FROM ${config.table} ORDER BY ${config.id} DESC`;
       const [rows] = await pool.query(sql);
-      res.json(rows);
+      res.json(
+        config.table === "usuarios"
+          ? rows.map((row) => ({ ...row, perfil: roleFor(row.perfil) }))
+          : rows,
+      );
     } catch (error) {
       next(error);
     }
@@ -114,7 +118,10 @@ function resource(config) {
 
   router.patch("/:id", allowRoles("Administrador", "Gestor"), update);
   router.put("/:id", allowRoles("Administrador", "Gestor"), update);
-  router.delete("/:id", allowRoles("Administrador"), async (req, res, next) => {
+  router.delete(
+    "/:id",
+    allowRoles("Administrador", "Gestor"),
+    async (req, res, next) => {
     try {
       const [result] =
         config.table === "maquinas"
@@ -132,7 +139,8 @@ function resource(config) {
     } catch (error) {
       next(error);
     }
-  });
+    },
+  );
   return router;
 }
 

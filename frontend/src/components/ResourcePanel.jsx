@@ -11,6 +11,7 @@ export default function ResourcePanel({
   endpoint,
   columns,
   createFields = NO_CREATE_FIELDS,
+  deletable = false,
 }) {
   const [rows, setRows] = useState([]);
   const [busy, setBusy] = useState(true);
@@ -18,11 +19,15 @@ export default function ResourcePanel({
   const [values, setValues] = useState({});
   const [related, setRelated] = useState({});
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(null);
   const [notice, setNotice] = useState("");
   async function load() {
     setBusy(true);
     try {
-      setRows(await apiFetch(endpoint));
+      const result = await apiFetch(endpoint);
+      setRows(
+        deletable ? result.filter((row) => Boolean(row.ativo)) : result,
+      );
       setError("");
     } catch (e) {
       setError(e.message);
@@ -35,7 +40,9 @@ export default function ResourcePanel({
     apiFetch(endpoint)
       .then((value) => {
         if (active) {
-          setRows(value);
+          setRows(
+            deletable ? value.filter((row) => Boolean(row.ativo)) : value,
+          );
           setError("");
         }
       })
@@ -52,7 +59,7 @@ export default function ResourcePanel({
       relatedFields.map((field) =>
         apiFetch(field.endpoint).then((value) => [
           field.name,
-          value.filter((row) => row.ativo !== false),
+          value.filter((row) => Boolean(row.ativo)),
         ]),
       ),
     )
@@ -63,7 +70,7 @@ export default function ResourcePanel({
     return () => {
       active = false;
     };
-  }, [endpoint, createFields]);
+  }, [endpoint, createFields, deletable]);
   async function submit(event) {
     event.preventDefault();
     setSaving(true);
@@ -82,6 +89,22 @@ export default function ResourcePanel({
       setError(e.message);
     } finally {
       setSaving(false);
+    }
+  }
+  async function remove(row) {
+    const id = row[columns[0].key];
+    if (!window.confirm(`Deseja excluir este registro de ${title.toLowerCase()}?`)) return;
+    setDeleting(id);
+    setError("");
+    setNotice("");
+    try {
+      await apiFetch(`${endpoint}/${id}`, { method: "DELETE" });
+      setNotice("Registro excluído.");
+      await load();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setDeleting(null);
     }
   }
   return (
@@ -166,6 +189,7 @@ export default function ResourcePanel({
                   {columns.map((column) => (
                     <th key={column.key}>{column.label}</th>
                   ))}
+                  {deletable && <th>AÇÕES</th>}
                 </tr>
               </thead>
               <tbody>
@@ -180,6 +204,19 @@ export default function ResourcePanel({
                           : (row[column.key] ?? "—")}
                       </td>
                     ))}
+                    {deletable && (
+                      <td>
+                        <button
+                          type="button"
+                          className={styles.delete}
+                          disabled={deleting !== null}
+                          onClick={() => remove(row)}
+                          aria-label={`Excluir registro ${row[columns[0].key]}`}
+                        >
+                          {deleting === row[columns[0].key] ? "Excluindo…" : "Excluir"}
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

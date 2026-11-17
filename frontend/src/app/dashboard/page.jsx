@@ -6,11 +6,11 @@ import { apiFetch } from "../../lib/api.js";
 import styles from "./dashboard.module.css";
 
 const shortcuts = [
-  ["▦", "Ocorrências", "/dashboard/ocorrencias"],
-  ["▤", "Setores & Máquinas", "/dashboard/setores-maquinas"],
-  ["♙", "Responsáveis", "/dashboard/responsaveis"],
-  ["⌁", "Indicadores & SLA", "/dashboard/indicadores"],
-  ["▧", "Relatórios", "/dashboard/relatorios"],
+  ["bi bi-flag", "Ocorrências", "/dashboard/ocorrencias"],
+  ["bi bi-building-gear", "Setores & Máquinas", "/dashboard/setores-maquinas"],
+  ["bi bi-person-badge", "Responsáveis", "/dashboard/responsaveis"],
+  ["bi bi-graph-up", "Indicadores & SLA", "/dashboard/indicadores"],
+  ["bi bi-file-earmark-bar-graph", "Relatórios", "/dashboard/relatorios"],
 ];
 const priorityStyles = {
   Baixa: "baixa",
@@ -66,7 +66,7 @@ export default function Dashboard() {
       <section className={styles.shortcuts}>
         {shortcuts.map(([icon, title, href]) => (
           <Link key={href} href={href}>
-            <span>{icon}</span>
+            <span><i className={icon} /></span>
             <b>{title}</b>
             <i>↗</i>
           </Link>
@@ -94,24 +94,24 @@ export default function Dashboard() {
           <>
             <section className={styles.metrics}>
               <Metric
-                icon="▦"
+                icon="bi bi-grid"
                 label="Total de ocorrências"
                 value={data.total}
               />
               <Metric
-                icon="⚑"
+                icon="bi bi-flag"
                 label="Abertas"
                 value={data.abertas}
                 accent="red"
               />
               <Metric
-                icon="◷"
+                icon="bi bi-clock-history"
                 label="Em andamento"
                 value={data.em_andamento}
                 accent="purple"
               />
               <Metric
-                icon="✓"
+                icon="bi bi-check-circle"
                 label="Resolvidas"
                 value={data.resolvidas}
                 accent="green"
@@ -119,14 +119,14 @@ export default function Dashboard() {
             </section>
             <section className={styles.alerts}>
               <div>
-                <span className={styles.alertIcon}>!</span>
+                <span className={styles.alertIcon}><i className="bi bi-exclamation-circle" /></span>
                 <span>
                   <b>{data.criticas} ocorrências críticas</b>
                   <small>Exigem atenção imediata</small>
                 </span>
               </div>
               <div>
-                <span className={styles.alertIcon}>◷</span>
+                <span className={styles.alertIcon}><i className="bi bi-clock-history" /></span>
                 <span>
                   <b>{data.atrasadas} prazos ultrapassados</b>
                   <small>Ocorrências ainda não resolvidas</small>
@@ -220,7 +220,7 @@ export default function Dashboard() {
 function Metric({ icon, label, value, accent = "blue" }) {
   return (
     <article className={styles.metric}>
-      <span className={`${styles.metricIcon} ${styles[accent]}`}>{icon}</span>
+      <span className={`${styles.metricIcon} ${styles[accent]}`}><i className={icon} /></span>
       <small>{label}</small>
       <b>{value ?? 0}</b>
     </article>
