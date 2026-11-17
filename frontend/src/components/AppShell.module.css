@@ -1,3 +1,4 @@
+/* Estrutura principal e navegação */
 .frame {
   min-height: 100vh;
   background: #091725;
@@ -9,8 +10,8 @@
   position: fixed;
   inset: 0 auto 0 0;
   width: 252px;
-  background: #0d1f2f;
-  border-right: 1px solid #ffffff12;
+  background: var(--ink);
+  border-right: 1px solid var(--border-subtle);
   padding: 25px 16px 15px;
   display: flex;
   flex-direction: column;

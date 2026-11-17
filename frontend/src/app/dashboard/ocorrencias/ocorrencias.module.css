@@ -1,3 +1,4 @@
+/* Listagem e filtros de ocorrências */
 .page {
   color: #edf3f7;
 }
@@ -28,6 +29,11 @@
   color: white;
   font-size: 10px;
   font-weight: 700;
+  transition: background-color 0.16s ease, transform 0.16s ease;
+}
+.primary:hover {
+  background: #6046a7;
+  transform: translateY(-1px);
 }
 .filters {
   display: grid;
@@ -41,7 +47,7 @@
   height: 37px;
   border: 1px solid #2a4051;
   border-radius: 7px;
-  background: #0f2233;
+  background: var(--surface);
   color: #dce5ec;
   padding: 0 10px;
   font: inherit;

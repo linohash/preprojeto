@@ -1,3 +1,4 @@
+/* Formulários e detalhes de ocorrência */
 .page {
   color: #edf3f7;
 }
@@ -30,7 +31,7 @@
   padding: 23px;
   border: 1px solid #ffffff15;
   border-radius: 11px;
-  background: #0f2233;
+  background: var(--surface);
 }
 .form h2 {
   font-size: 14px;
@@ -55,7 +56,7 @@
 .grid select {
   width: 100%;
   min-height: 39px;
-  border: 1px solid #2a4152;
+  border: 1px solid var(--border-control);
   border-radius: 6px;
   background: #0a1a29;
   color: #eaf1f6;

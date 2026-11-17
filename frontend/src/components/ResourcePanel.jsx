@@ -11,6 +11,8 @@ export default function ResourcePanel({
   endpoint,
   columns,
   createFields = NO_CREATE_FIELDS,
+  editFields = NO_CREATE_FIELDS,
+  editable = false,
   deletable = false,
 }) {
   const [rows, setRows] = useState([]);
@@ -21,6 +23,7 @@ export default function ResourcePanel({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(null);
   const [notice, setNotice] = useState("");
+  const [editing, setEditing] = useState(null);
   async function load() {
     setBusy(true);
     try {
@@ -78,18 +81,34 @@ export default function ResourcePanel({
     setNotice("");
     try {
       const body = { ...values };
-      for (const field of createFields)
+      const fields = editing ? editFields : createFields;
+      for (const field of fields)
         if (["number", "related"].includes(field.type) && body[field.name])
           body[field.name] = Number(body[field.name]);
-      await apiFetch(endpoint, { method: "POST", body: JSON.stringify(body) });
+      if (editing && body.senha === "") delete body.senha;
+      await apiFetch(editing ? `${endpoint}/${editing[columns[0].key]}` : endpoint, {
+        method: editing ? "PATCH" : "POST",
+        body: JSON.stringify(body),
+      });
       setValues({});
-      setNotice("Cadastro realizado.");
+      setEditing(null);
+      setNotice(editing ? "Cadastro atualizado." : "Cadastro realizado.");
       await load();
     } catch (e) {
       setError(e.message);
     } finally {
       setSaving(false);
     }
+  }
+  function edit(row) {
+    setEditing(row);
+    setValues(
+      Object.fromEntries(
+        editFields.map((field) => [field.name, field.name === "senha" ? "" : row[field.name] ?? ""]),
+      ),
+    );
+    setError("");
+    setNotice("");
   }
   async function remove(row) {
     const id = row[columns[0].key];
@@ -119,11 +138,11 @@ export default function ResourcePanel({
           ↻ Atualizar
         </button>
       </div>
-      {createFields.length > 0 && (
+      {(createFields.length > 0 || editing) && (
         <form className={styles.form} onSubmit={submit}>
-          <h2>Novo cadastro</h2>
+          <h2>{editing ? "Editar cadastro" : "Novo cadastro"}</h2>
           <div>
-            {createFields.map((field) => {
+            {(editing ? editFields : createFields).map((field) => {
               const choices =
                 field.type === "related"
                   ? (related[field.name] || []).map((row) => ({
@@ -156,6 +175,7 @@ export default function ResourcePanel({
                     <input
                       required={field.required !== false}
                       type={field.type || "text"}
+                      minLength={field.minLength}
                       value={values[field.name] || ""}
                       onChange={(e) =>
                         setValues((v) => ({
@@ -169,9 +189,27 @@ export default function ResourcePanel({
               );
             })}
           </div>
-          <button disabled={saving}>
-            {saving ? "Salvando…" : "Adicionar"}
-          </button>
+          <div className={styles.formActions}>
+            <button disabled={saving}>
+              {saving
+                ? "Salvando…"
+                : editing
+                  ? "Salvar alterações"
+                  : "Adicionar"}
+            </button>
+            {editing && (
+              <button
+                type="button"
+                className={styles.cancel}
+                onClick={() => {
+                  setEditing(null);
+                  setValues({});
+                }}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
         </form>
       )}
       {notice && <div className={styles.notice}>{notice}</div>}
@@ -189,6 +227,7 @@ export default function ResourcePanel({
                   {columns.map((column) => (
                     <th key={column.key}>{column.label}</th>
                   ))}
+                  {editable && !deletable && <th>AÇÕES</th>}
                   {deletable && <th>AÇÕES</th>}
                 </tr>
               </thead>
@@ -204,17 +243,29 @@ export default function ResourcePanel({
                           : (row[column.key] ?? "—")}
                       </td>
                     ))}
-                    {deletable && (
-                      <td>
-                        <button
-                          type="button"
-                          className={styles.delete}
-                          disabled={deleting !== null}
-                          onClick={() => remove(row)}
-                          aria-label={`Excluir registro ${row[columns[0].key]}`}
-                        >
+                    {(deletable || editable) && (
+                      <td className={styles.rowActions}>
+                        {editable && (
+                          <button
+                            type="button"
+                            className={styles.edit}
+                            disabled={deleting !== null || saving}
+                            onClick={() => edit(row)}
+                          >
+                            Editar
+                          </button>
+                        )}
+                        {deletable && (
+                          <button
+                            type="button"
+                            className={styles.delete}
+                            disabled={deleting !== null}
+                            onClick={() => remove(row)}
+                            aria-label={`Excluir registro ${row[columns[0].key]}`}
+                          >
                           {deleting === row[columns[0].key] ? "Excluindo…" : "Excluir"}
                         </button>
+                        )}
                       </td>
                     )}
                   </tr>

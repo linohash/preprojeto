@@ -1,3 +1,4 @@
+/* Relatórios e exportação */
 .page {
   color: #edf3f7;
 }
@@ -31,6 +32,11 @@
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
+  transition: background-color 0.16s ease, transform 0.16s ease;
+}
+.download:hover:not(:disabled) {
+  background: #6046a7;
+  transform: translateY(-1px);
 }
 .download:disabled {
   opacity: 0.45;

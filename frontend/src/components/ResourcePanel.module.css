@@ -1,5 +1,6 @@
+/* Layout geral e cabeçalho */
 .page {
-  color: #eaf1f6;
+  color: var(--text-primary);
 }
 .heading {
   display: flex;
@@ -18,49 +19,81 @@
   margin: 7px 0;
 }
 .heading p {
-  color: #91a4b2;
+  color: var(--text-muted);
   font-size: 10px;
 }
 .refresh {
-  border: 1px solid #294457;
-  border-radius: 6px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
   padding: 9px 12px;
-  background: #102538;
+  background: var(--surface-raised);
   color: #c1d2de;
   font: inherit;
   font-size: 10px;
   cursor: pointer;
+  transition: background-color 0.16s ease, border-color 0.16s ease;
 }
-.delete {
+.refresh:hover {
+  background: #17334a;
+  border-color: #456b86;
+}
+/* Ações */
+.delete,
+.edit {
   border: 1px solid #75404a;
-  border-radius: 5px;
+  border-radius: var(--radius-control);
   padding: 6px 9px;
   background: #3b2028;
   color: #ffb4bc;
   font: inherit;
   font-size: 10px;
   cursor: pointer;
+  transition: background-color 0.16s ease, transform 0.16s ease;
+}
+.edit {
+  border-color: var(--border-control);
+  background: #142d40;
+  color: #b9d9f3;
+}
+.delete:hover,
+.edit:hover {
+  transform: translateY(-1px);
+  background: #4b2930;
+}
+.edit:hover {
+  background: #1c3c55;
 }
 .delete:disabled {
   opacity: 0.6;
   cursor: wait;
 }
+/* Formulários e painéis */
 .form,
 .card {
-  border: 1px solid #ffffff14;
-  border-radius: 10px;
-  background: #0f2233;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface);
   padding: 15px;
   margin-bottom: 12px;
+  box-shadow: 0 10px 24px #0002;
+}
+.form {
+  display: grid;
+  gap: 12px;
 }
 .form h2 {
   font-size: 12px;
-  margin-bottom: 12px;
 }
 .form > div {
   display: flex;
   align-items: end;
   gap: 9px;
+  flex-wrap: wrap;
+}
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 .form label {
@@ -72,29 +105,44 @@
 .form input,
 .form select {
   height: 35px;
-  min-width: 155px;
-  border: 1px solid #2a4254;
-  border-radius: 6px;
-  background: #091a28;
+  min-width: min(155px, 100%);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+  background: var(--surface-input);
   color: #e7eef3;
   padding: 0 9px;
   font: inherit;
   font-size: 10px;
 }
-.form > button {
+.formActions > button {
   height: 35px;
   border: 0;
   border-radius: 6px;
   padding: 0 13px;
-  background: #07509b;
+  background: var(--accent-blue);
   color: white;
   font: inherit;
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
 }
-.form > button:disabled {
+.formActions > button:disabled {
   opacity: 0.6;
+}
+.formActions button {
+  transition: background-color 0.16s ease, transform 0.16s ease;
+}
+.formActions button:hover:not(:disabled) {
+  background: #1262ae;
+  transform: translateY(-1px);
+}
+.formActions .cancel {
+  border: 1px solid var(--border-control);
+  background: #142d40;
+  color: #c6d4de;
+}
+.formActions .cancel:hover {
+  background: #1c3c55;
 }
 .notice,
 .error {
@@ -132,6 +180,12 @@
   color: #c4d0d9;
   font-size: 10px;
 }
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
 .empty {
   text-align: center;
   padding: 25px;
@@ -153,7 +207,10 @@
   .form select {
     width: 100%;
   }
-  .form > button {
+  .formActions > button {
     align-self: flex-start;
+  }
+  .formActions {
+    gap: 8px;
   }
 }

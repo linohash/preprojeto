@@ -56,8 +56,9 @@ function resource(config) {
           (key) => req.body[key] !== undefined,
         );
         if (
-          !req.body.nome ||
-          (config.table === "usuarios" && (!req.body.email || !req.body.senha))
+          !String(req.body.nome || "").trim() ||
+          (config.table === "usuarios" &&
+            (!String(req.body.email || "").trim() || !req.body.senha))
         ) {
           return res
             .status(400)
@@ -101,6 +102,22 @@ function resource(config) {
         return res
           .status(400)
           .json({ message: "Informe os campos para atualizar." });
+      if (
+        config.table === "usuarios" &&
+        ((req.body.nome !== undefined && !String(req.body.nome).trim()) ||
+          (req.body.email !== undefined && !String(req.body.email).trim()))
+      )
+        return res
+          .status(400)
+          .json({ message: "Nome e email nÃ£o podem ficar vazios." });
+      if (
+        config.table === "usuarios" &&
+        req.body.senha !== undefined &&
+        String(req.body.senha).length < 8
+      )
+        return res
+          .status(400)
+          .json({ message: "A senha deve ter pelo menos 8 caracteres." });
       const values = fields.map((key) =>
         key === "senha" ? hashPassword(String(req.body[key])) : req.body[key],
       );
