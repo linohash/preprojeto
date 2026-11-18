@@ -30,7 +30,9 @@ services:
       NODE_ENV: production
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
       DB_HOST: ${DB_HOST:-database}
-      DB_PORT: ${DB_PORT:-3306}
+      # This is the port inside the Docker network. DATABASE_HOST_PORT is
+      # only used to publish MySQL on the host (for example, host port 3309).
+      DB_PORT: "3306"
       DB_USER: ${DB_USER:-app_user}
       DB_PASSWORD: ${DB_PASSWORD:-app_password}
       DB_NAME: ${DB_NAME:-app_db}
