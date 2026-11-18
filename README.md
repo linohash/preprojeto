@@ -102,7 +102,7 @@ Docker Compose raiz (`.env`):
 ```env
 FRONTEND_HOST_PORT=3000
 BACKEND_HOST_PORT=8080
-DATABASE_HOST_PORT=3306
+DATABASE_HOST_PORT=3309
 
 FRONTEND_PORT=3000
 BACKEND_PORT=8080
@@ -127,7 +127,7 @@ Para rodar varios grupos no mesmo servidor, mude pelo menos as portas publicadas
 ```env
 FRONTEND_HOST_PORT=3001
 BACKEND_HOST_PORT=8081
-DATABASE_HOST_PORT=3307
+DATABASE_HOST_PORT=3309
 FRONTEND_URL=http://localhost:3001
 NEXT_PUBLIC_API_URL=http://localhost:8081/api
 ```
@@ -154,7 +154,7 @@ Frontend (`frontend/.env.local`):
 NEXT_PUBLIC_API_URL=http://localhost:8080/api
 ```
 
-No Docker Compose, o backend usa `DB_HOST=database`, porque esse e o nome do servico MySQL na rede Docker.
+No Docker Compose, o backend usa `DB_HOST=database` e `DB_PORT=3306`, porque esse e o nome do servico MySQL e sua porta interna na rede Docker. `DATABASE_HOST_PORT` (por exemplo, `3309`) publica o banco no host para conexoes externas; nao deve ser usado pelo backend dentro do Compose.
 
 ## Backend
 
