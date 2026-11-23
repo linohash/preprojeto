@@ -7,6 +7,9 @@ const catalogNameCorrections = new Map([
   ["produo", "Produto"],
   ["eltrica", "Elétrica"],
   ["mecnica", "Mecânica"],
+  ["manuteno preventiva", "Manutenção preventiva"],
+  ["falha eltrica", "Falha elétrica"],
+  ["falha mecanica", "Falha mecânica"],
 ]);
 
 export function normalizeCatalogName(name) {
