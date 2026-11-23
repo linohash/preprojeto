@@ -20,8 +20,6 @@ if (missingDatabaseVariables.length) {
 
 export const pool = mysql.createPool({
   host: process.env.DB_HOST,
-  // Containers reach MySQL through the Compose service port. The published
-  // host port (for example 3309) is only for connections from outside Docker.
   port: Number(process.env.DB_PORT || 3306),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,

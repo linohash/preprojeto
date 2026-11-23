@@ -1,7 +1,7 @@
 import { pool } from "./database.js";
 
 // The database/init/01-schema.sql file is the source of truth. Startup only
-// checks that its tables exist; it never changes the database structure/data.
+// checks that its tables exist and normalizes known typos in catalog names.
 const requiredTables = [
   "usuarios",
   "setores",
@@ -25,4 +25,17 @@ export async function migrateDatabase() {
       `O banco configurado não corresponde a database/init/01-schema.sql. Tabelas ausentes: ${missing.join(", ")}`,
     );
   }
+
+  await pool.execute(
+    "UPDATE setores SET nome='Logística' WHERE LOWER(nome)='logstica'",
+  );
+  await pool.execute(
+    "UPDATE setores SET nome='Manutenção' WHERE LOWER(nome)='manuteno'",
+  );
+  await pool.execute(
+    "UPDATE tipos_ocorrencia SET nome='Logística' WHERE LOWER(nome)='logstica'",
+  );
+  await pool.execute(
+    "UPDATE tipos_ocorrencia SET nome='Manutenção' WHERE LOWER(nome)='manuteno'",
+  );
 }
