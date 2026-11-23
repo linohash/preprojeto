@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { apiFetch } from "../../../lib/api.js";
+import { apiFetch, normalizeCatalogName } from "../../../lib/api.js";
 import styles from "../forms.module.css";
 
 const initial = {
@@ -41,9 +41,17 @@ export default function NewOccurrence() {
       apiFetch("/usuarios"),
     ])
       .then(([a, b, c, d]) => {
-        setSets(a.filter((x) => x.ativo));
+        setSets(
+          a
+            .filter((x) => x.ativo)
+            .map((x) => ({ ...x, nome: normalizeCatalogName(x.nome) })),
+        );
         setMachines(b.filter((x) => x.ativo));
-        setTypes(c.filter((x) => x.ativo));
+        setTypes(
+          c
+            .filter((x) => x.ativo)
+            .map((x) => ({ ...x, nome: normalizeCatalogName(x.nome) })),
+        );
         setUsers(d.filter((x) => x.ativo));
         setForm((v) => ({
           ...v,

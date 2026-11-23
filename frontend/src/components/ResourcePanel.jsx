@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiFetch } from "../lib/api.js";
+import { apiFetch, normalizeCatalogName } from "../lib/api.js";
 import styles from "./ResourcePanel.module.css";
 
 const NO_CREATE_FIELDS = [];
@@ -29,7 +29,9 @@ export default function ResourcePanel({
     try {
       const result = await apiFetch(endpoint);
       setRows(
-        deletable ? result.filter((row) => Boolean(row.ativo)) : result,
+        (deletable ? result.filter((row) => Boolean(row.ativo)) : result).map(
+          (row) => ({ ...row, nome: normalizeCatalogName(row.nome) }),
+        ),
       );
       setError("");
     } catch (e) {
@@ -44,7 +46,9 @@ export default function ResourcePanel({
       .then((value) => {
         if (active) {
           setRows(
-            deletable ? value.filter((row) => Boolean(row.ativo)) : value,
+            (deletable ? value.filter((row) => Boolean(row.ativo)) : value).map(
+              (row) => ({ ...row, nome: normalizeCatalogName(row.nome) }),
+            ),
           );
           setError("");
         }
@@ -62,7 +66,9 @@ export default function ResourcePanel({
       relatedFields.map((field) =>
         apiFetch(field.endpoint).then((value) => [
           field.name,
-          value.filter((row) => Boolean(row.ativo)),
+          value
+            .filter((row) => Boolean(row.ativo))
+            .map((row) => ({ ...row, nome: normalizeCatalogName(row.nome) })),
         ]),
       ),
     )

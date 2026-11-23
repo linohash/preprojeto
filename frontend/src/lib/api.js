@@ -1,6 +1,21 @@
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
 
+const catalogNameCorrections = new Map([
+  ["logstica", "Logística"],
+  ["manuteno", "Manutenção"],
+  ["produo", "Produto"],
+  ["eltrica", "Elétrica"],
+  ["mecnica", "Mecânica"],
+]);
+
+export function normalizeCatalogName(name) {
+  return (
+    catalogNameCorrections.get(String(name).trim().toLocaleLowerCase("pt-BR")) ||
+    name
+  );
+}
+
 export async function apiFetch(path, options = {}) {
   const token =
     typeof window !== "undefined"
