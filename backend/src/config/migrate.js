@@ -54,6 +54,6 @@ export async function migrateDatabase() {
     "UPDATE tipos_ocorrencia SET nome='Falha elétrica' WHERE LOWER(nome)='falha eltrica'",
   );
   await pool.execute(
-    "UPDATE tipos_ocorrencia SET nome='Falha mecânica' WHERE LOWER(nome)='falha mecanica'",
+    "UPDATE tipos_ocorrencia SET nome='Falha mecânica' WHERE LOWER(nome)='falha mecnica'",
   );
 }
