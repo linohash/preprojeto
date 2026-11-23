@@ -38,4 +38,13 @@ export async function migrateDatabase() {
   await pool.execute(
     "UPDATE tipos_ocorrencia SET nome='Manutenção' WHERE LOWER(nome)='manuteno'",
   );
+  await pool.execute(
+    "UPDATE tipos_ocorrencia SET nome='Produto' WHERE LOWER(nome)='produo'",
+  );
+  await pool.execute(
+    "UPDATE tipos_ocorrencia SET nome='Elétrica' WHERE LOWER(nome)='eltrica'",
+  );
+  await pool.execute(
+    "UPDATE tipos_ocorrencia SET nome='Mecânica' WHERE LOWER(nome)='mecnica'",
+  );
 }
