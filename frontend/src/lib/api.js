@@ -12,6 +12,29 @@ const catalogNameCorrections = new Map([
   ["falha mecanica", "Falha mecânica"],
 ]);
 
+const priorityCorrections = new Map([
+  ["mdia", "Média"],
+  ["media", "Média"],
+]);
+
+export function normalizePriority(value) {
+  if (typeof value !== "string") return value;
+  return priorityCorrections.get(value.trim().toLocaleLowerCase("pt-BR")) || value;
+}
+
+function normalizePriorities(value) {
+  if (Array.isArray(value)) return value.map(normalizePriorities);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.entries(value).map(([key, item]) => [
+      key,
+      key === "prioridade" || key === "nome"
+        ? normalizePriority(item)
+        : normalizePriorities(item),
+    ]),
+  );
+}
+
 export function normalizeCatalogName(name) {
   return (
     catalogNameCorrections.get(String(name).trim().toLocaleLowerCase("pt-BR")) ||
@@ -44,7 +67,7 @@ export async function apiFetch(path, options = {}) {
     throw new Error(
       data?.message || `Falha na requisição (${response.status}).`,
     );
-  return data;
+  return normalizePriorities(data);
 }
 
 export async function apiDownload(path) {
