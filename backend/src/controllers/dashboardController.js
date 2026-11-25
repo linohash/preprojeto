@@ -9,7 +9,7 @@ export async function summary(request, response, next) {
       params.push(request.usuario.sub);
     }
     const [totals] = await pool.execute(
-      `SELECT COUNT(*) AS total, COALESCE(SUM(status='Aberta'),0) AS abertas, COALESCE(SUM(status='Em andamento'),0) AS em_andamento, COALESCE(SUM(status='Resolvida'),0) AS resolvidas, COALESCE(SUM(prioridade='Crítica' AND status NOT IN ('Resolvida','Cancelada')),0) AS criticas, COALESCE(SUM(prazo<NOW() AND status NOT IN ('Resolvida','Cancelada')),0) AS atrasadas, ROUND(AVG(CASE WHEN data_conclusao IS NOT NULL THEN TIMESTAMPDIFF(HOUR,data_abertura,data_conclusao) END),1) AS mttr_horas FROM ocorrencias WHERE 1=1${filter}`,
+      `SELECT COUNT(*) AS total, COALESCE(SUM(status='Aberta'),0) AS abertas, COALESCE(SUM(status='Em andamento'),0) AS em_andamento, COALESCE(SUM(status='Resolvida'),0) AS resolvidas, COALESCE(SUM(prioridade='Critica' AND status NOT IN ('Resolvida','Cancelada')),0) AS criticas, COALESCE(SUM(prazo<NOW() AND status NOT IN ('Resolvida','Cancelada')),0) AS atrasadas, ROUND(AVG(CASE WHEN data_conclusao IS NOT NULL THEN TIMESTAMPDIFF(HOUR,data_abertura,data_conclusao) END),1) AS mttr_horas FROM ocorrencias WHERE 1=1${filter}`,
       params,
     );
     const [prioridades] = await pool.execute(

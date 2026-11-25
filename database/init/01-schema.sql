@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS ocorrencias (
   id_ocorrencia INT AUTO_INCREMENT PRIMARY KEY,
   titulo VARCHAR(180) NOT NULL,
   descricao TEXT NOT NULL,
-  prioridade ENUM('Baixa','Média','Alta','Crítica') NOT NULL DEFAULT 'Média',
+  prioridade ENUM('Baixa','Media','Alta','Critica') NOT NULL DEFAULT 'Media',
   status ENUM('Aberta','Em andamento','Aguardando','Resolvida','Cancelada') NOT NULL DEFAULT 'Aberta',
   id_setor INT NOT NULL,
   id_maquina INT NULL,
