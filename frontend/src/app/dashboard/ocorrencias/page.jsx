@@ -7,9 +7,9 @@ import styles from "./ocorrencias.module.css";
 
 const priorityClass = {
   Baixa: "baixa",
-  Média: "media",
+  Media: "media",
   Alta: "alta",
-  Crítica: "critica",
+  Critica: "critica",
 };
 const statusClass = {
   Aberta: "aberta",

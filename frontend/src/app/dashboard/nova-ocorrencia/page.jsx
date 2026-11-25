@@ -143,9 +143,9 @@ export default function NewOccurrence() {
                 onChange={update}
               >
                 <option>Baixa</option>
-                <option>Média</option>
+                <option>Media</option>
                 <option>Alta</option>
-                <option>Crítica</option>
+                <option>Critica</option>
               </select>
             </label>
             <label>
