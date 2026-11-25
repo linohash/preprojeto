@@ -18,6 +18,7 @@
   gap: 8px;
   font-weight: 800;
   font-size: 16px;
+  white-space: nowrap;
 }
 .brand > img {
   width: 34px;
