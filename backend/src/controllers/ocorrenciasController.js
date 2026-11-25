@@ -55,7 +55,7 @@ export async function list(request, response, next) {
     const { busca, setor, status, prioridade } = request.query;
     let sql = `SELECT o.*, o.id_usuario AS id_responsavel, s.nome AS setor, m.nome AS maquina, t.nome AS tipo, u.nome AS responsavel,
       (o.prazo < NOW() AND o.status NOT IN ('Resolvida','Cancelada')) AS atrasada,
-      (o.status NOT IN ('Resolvida','Cancelada') AND (o.prioridade='Crítica' OR o.prazo < NOW())) AS escalonada
+      (o.status NOT IN ('Resolvida','Cancelada') AND (o.prioridade='Critica' OR o.prazo < NOW())) AS escalonada
       FROM ocorrencias o JOIN setores s ON s.id_setor=o.id_setor LEFT JOIN maquinas m ON m.id_maquina=o.id_maquina
       JOIN tipos_ocorrencia t ON t.id_tipo=o.id_tipo LEFT JOIN usuarios u ON u.id_usuario=o.id_usuario`;
     const where = [];
@@ -117,7 +117,7 @@ export async function create(request, response, next) {
           message:
             "Preencha título, descrição, prioridade, setor, tipo e prazo.",
         });
-    if (!["Baixa", "Média", "Alta", "Crítica"].includes(prioridade))
+   if (!["Baixa", "Media", "Alta", "Critica"].includes(prioridade))
       return response.status(400).json({ message: "Prioridade inválida." });
     if (
       String(titulo).trim().length > 180 ||
@@ -346,9 +346,9 @@ export async function updateDetails(request, response, next) {
             "Técnicos podem atualizar status, causa e solução das ocorrências atribuídas.",
         });
     if (
-      request.body.prioridade &&
-      !["Baixa", "Média", "Alta", "Crítica"].includes(request.body.prioridade)
-    )
+  request.body.prioridade &&
+  !["Baixa", "Media", "Alta", "Critica"].includes(request.body.prioridade)
+)
       return response.status(400).json({ message: "Prioridade inválida." });
     if (
       request.body.status &&
