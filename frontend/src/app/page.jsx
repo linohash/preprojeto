@@ -90,7 +90,7 @@ export default function Home() {
             height={40}
           />
           <span>
-            Industri<b>Alert</b>
+            industri<b>Alert</b>
             <small>GESTÃO DE OCORRÊNCIAS</small>
           </span>
         </Link>
@@ -231,7 +231,7 @@ export default function Home() {
               height={35}
             />
             <span>
-              Industri<b>Alert</b>
+              industri<b>Alert</b>
             </span>
           </Link>
           <span>Projeto Integrador · Desenvolvimento de Sistemas SENAI</span>

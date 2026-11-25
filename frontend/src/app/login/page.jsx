@@ -40,7 +40,7 @@ export default function LoginPage() {
           width={36}
           height={36}
         />
-        Industri<b>Alert</b>
+        industri<b>Alert</b>
       </Link>
       <form className={styles.card} onSubmit={submit}>
         <span className={styles.label}>ACESSO AO SISTEMA</span>

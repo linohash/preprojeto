@@ -122,7 +122,7 @@ export default function AppShell({ children }) {
           />
           <span>
             <b>
-              Industri<span>Alert</span>
+              industri<span>Alert</span>
             </b>
             <small>GESTÃO DE OCORRÊNCIAS</small>
           </span>
