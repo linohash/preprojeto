@@ -8,7 +8,7 @@ import styles from "../forms.module.css";
 const initial = {
   titulo: "",
   descricao: "",
-  prioridade: "Média",
+  prioridade: "",
   id_setor: "",
   id_maquina: "",
   id_tipo: "",
